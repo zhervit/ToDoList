@@ -24,7 +24,7 @@ class NotesList extends React.Component {
         this.onAddNote = this.onAddNote.bind(this);
         this.onRemoveNote = this.onRemoveNote.bind(this);
     }
-    // загрузка данных
+
     loadData() {
         var xmlRequest = new XMLHttpRequest();
         xmlRequest.open("get", this.props.apiUrl, true);
@@ -56,7 +56,7 @@ class NotesList extends React.Component {
             xmlRequest.send(data);
         }
     }
-    // удаление объекта
+
     onRemoveNote(note) {
 
         if (note) {
