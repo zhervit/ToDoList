@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ToDoList.Data;
 
 namespace ToDoList.Controllers
 {
@@ -10,11 +12,24 @@ namespace ToDoList.Controllers
 	[ApiController]
 	public class ValuesController : ControllerBase
 	{
+
+		private List<Note> notes;
+		public ValuesController()
+		{
+			
+		}
+
+		public ValuesController(List<Note> notes)
+		{
+			this.notes = notes;
+		}
+
+
 		// GET api/values
 		[HttpGet]
-		public ActionResult<IEnumerable<string>> Get()
+		public ActionResult<IEnumerable<Note>> Get()
 		{
-			return new string[] { "value1", "value2" };
+			return notes;
 		}
 
 		// GET api/values/5
@@ -26,8 +41,9 @@ namespace ToDoList.Controllers
 
 		// POST api/values
 		[HttpPost]
-		public void Post([FromBody] string value)
+		public void Post([FromBody] Note note)
 		{
+
 		}
 
 		// PUT api/values/5
