@@ -13,7 +13,51 @@
     }
 }
 
- 
+class NotesForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { name: "", text: "1" };
+
+        this.onSubmit = this.onSubmit.bind(this);
+        this.onNameChange = this.onNameChange.bind(this);
+        this.onTextChange = this.onTextChange.bind(this);
+    }
+    onNameChange(e) {
+        this.setState({ name: e.target.value });
+    }
+    onTextChange(e) {
+        this.setState({ text: e.target.value });
+    }
+    onSubmit(e) {
+        e.preventDefault();
+        var noteName = this.state.name.trim();
+        var noteText = this.state.text;
+        if (!noteName) {
+            return;
+        }
+        this.props.onNoteSubmit({ name: noteName, text: noteText });
+        this.setState({ name: "", text: 0 });
+    }
+    render() {
+        return (
+            <form onSubmit={this.onSubmit}>
+                <p>
+                    <input type="text"
+                           placeholder="note place holder (header)?"
+                           value={this.state.name}
+                           onChange={this.onNameChange} />
+                </p>
+                <p>
+                    <input type="text"
+                           placeholder="text?"
+                           value={this.state.price}
+                           onChange={this.onTextChange} />
+                </p>
+                <input type="submit" value="Save" />
+            </form>
+        );
+    }
+}
 
 class NotesList extends React.Component {
 
