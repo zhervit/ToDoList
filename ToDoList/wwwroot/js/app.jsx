@@ -1,14 +1,18 @@
 ﻿class Note extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { data: props.note };
+        this.state = { note: props.note };
         this.onClick = this.onClick.bind(this);
+    }
+	onClick(e){
+        this.props.onRemove(this.state.note);
     }
     render() {
         return <div>
                    <p><b>{this.state.note.id}</b></p>
                    <p> {this.state.note.name}</p>
                    <p> {this.state.note.text}</p>
+				  <p><button onClick={this.onClick}>Удалить</button></p>
                </div>;
     }
 }

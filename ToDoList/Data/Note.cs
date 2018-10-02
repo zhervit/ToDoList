@@ -16,7 +16,7 @@ namespace ToDoList.Data
 			private set => id = value;
 		}
 
-		public string Title { get; set; }
+		public string Name { get; set; }
 
 		public string Text { get; set; }
 
@@ -27,7 +27,8 @@ namespace ToDoList.Data
 
 		public Note(string title = "", string text = "")
 		{
-			Title = title;
+			Id = 11;
+			Name = title;
 			Text = text;
 		}
 
