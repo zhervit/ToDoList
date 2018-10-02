@@ -14,16 +14,10 @@ namespace ToDoList.Controllers
 	{
 
 		private List<Note> notes;
-		public ValuesController()
-		{
-			
-		}
 
-		public ValuesController(List<Note> notes)
+		static ValuesController()
 		{
-			this.notes = notes;
 		}
-
 
 		// GET api/values
 		[HttpGet]
