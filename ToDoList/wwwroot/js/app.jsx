@@ -1,7 +1,7 @@
 ﻿class Note extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { note: props.note };
+        this.state = { data: props.note };
         this.onClick = this.onClick.bind(this);
     }
 	onClick(e){
@@ -9,9 +9,9 @@
     }
     render() {
         return <div>
-                   <p><b>{this.state.note.id}</b></p>
-                   <p> {this.state.note.name}</p>
-                   <p> {this.state.note.text}</p>
+                   <p><b>{this.state.data.id}</b></p>
+                   <p>{this.state.data.name}</p>
+                   <p>{this.state.data.text}</p>
 				  <p><button onClick={this.onClick}>Удалить</button></p>
                </div>;
     }
@@ -20,7 +20,7 @@
 class NotesForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { name: "", text: "1" };
+        this.state = { name: "", text: "" };
 
         this.onSubmit = this.onSubmit.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
@@ -40,21 +40,21 @@ class NotesForm extends React.Component {
             return;
         }
         this.props.onNoteSubmit({ name: noteName, text: noteText });
-        this.setState({ name: "", text: 0 });
+        this.setState({ name: "", text: "" });
     }
     render() {
         return (
             <form onSubmit={this.onSubmit}>
                 <p>
                     <input type="text"
-                           placeholder="note place holder (header)?"
+                           placeholder="Enter the name"
                            value={this.state.name}
                            onChange={this.onNameChange} />
                 </p>
                 <p>
                     <input type="text"
-                           placeholder="text?"
-                           value={this.state.price}
+                           placeholder="Enter the text"
+                           value={this.state.text}
                            onChange={this.onTextChange} />
                 </p>
                 <input type="submit" value="Save" />
@@ -91,7 +91,7 @@ class NotesList extends React.Component {
     onAddNote(note) {
         if (note) {
 
-            var data = JSON.stringify({ "name": note.name, "text": note.price });
+            var data = JSON.stringify({ "name": note.name, "text": note.text });
             var xmlRequest = new XMLHttpRequest();
 
             xmlRequest.open("post", this.props.apiUrl, true);

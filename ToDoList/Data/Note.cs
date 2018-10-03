@@ -13,7 +13,7 @@ namespace ToDoList.Data
 		public int Id
 		{
 			get => id;
-			private set => id = value;
+			set => id = value;
 		}
 
 		public string Name { get; set; }

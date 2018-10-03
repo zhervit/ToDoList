@@ -13,7 +13,7 @@ namespace ToDoList.Controllers
 	public class ValuesController : ControllerBase
 	{
 
-		private List<Note> notes;
+		private List<Note> notes = new List<Note>();
 
 		static ValuesController()
 		{
@@ -23,7 +23,11 @@ namespace ToDoList.Controllers
 		[HttpGet]
 		public ActionResult<IEnumerable<Note>> Get()
 		{
-			return notes;
+
+			//var note = new Note("title", "text");
+			//notes.Add(note);
+			var notesList = NotesList.GetInstance();
+			return notesList.Notes;
 		}
 
 		// GET api/values/5
@@ -37,7 +41,8 @@ namespace ToDoList.Controllers
 		[HttpPost]
 		public void Post([FromBody] Note note)
 		{
-
+			var notesList = NotesList.GetInstance();
+			notesList.Add(note);
 		}
 
 		// PUT api/values/5
@@ -50,6 +55,9 @@ namespace ToDoList.Controllers
 		[HttpDelete("{id}")]
 		public void Delete(int id)
 		{
+			var notesList = NotesList.GetInstance();
+
+			notesList.DeleteById(id);
 		}
 	}
 }
