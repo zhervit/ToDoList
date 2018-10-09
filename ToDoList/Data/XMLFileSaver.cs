@@ -22,7 +22,8 @@ namespace ToDoList.Data
 			XElement noteElement = new XElement("Note",
 				new XAttribute("id", + newId),
 				new XElement("Name", note.Name),
-				new XElement("Text", note.Text));
+				new XElement("Text", note.Text),
+				new XElement("Category", note.Category));
 			doc.Root.Add(noteElement);
 			doc.Save(_path);
 
@@ -49,7 +50,8 @@ namespace ToDoList.Data
 					new XElement("Note",
 						new XAttribute("id", 0),
 						new XElement("Name", "testName"),
-						new XElement("Text", "TestText")
+						new XElement("Text", "TestText"),
+						new XElement("Category", "Category")
 					)));	
 					
 			doc.Save(_path);
@@ -67,8 +69,9 @@ namespace ToDoList.Data
 			{
 				Note note = new Note();
 				note.Id = Convert.ToInt32(el.Attribute("id").Value);
-				note.Name = el.Element("Name").Value;
-				note.Text = el.Element("Text").Value;
+				note.Name = el.Element("Name")?.Value;
+				note.Text = el.Element("Text")?.Value;
+				note.Category = el.Element("Category")?.Value;
 
 				notesList.Add(note);
 			}

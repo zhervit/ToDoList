@@ -9,7 +9,8 @@
     }
     render() {
         return  <div className="note">
-                        <p><b>{this.state.data.id}</b></p>
+                        <p><b>id: {this.state.data.id}</b></p>
+                        <p><b>cat: {this.state.data.category}</b></p>
                         <p>{this.state.data.name}</p>
                         <p><img src="/media/logo.svg" className="logopic"/></p>
                         <div className="text">
@@ -28,11 +29,12 @@
 class NotesForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { name: "", text: "" };
+        this.state = { name: "", text: "", category:"" };
 
         this.onSubmit = this.onSubmit.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
         this.onTextChange = this.onTextChange.bind(this);
+        this.onCategoryChange = this.onCategoryChange.bind(this);
     }
     onNameChange(e) {
         this.setState({ name: e.target.value });
@@ -40,15 +42,19 @@ class NotesForm extends React.Component {
     onTextChange(e) {
         this.setState({ text: e.target.value });
     }
+    onCategoryChange(e) {
+        this.setState({ category: e.target.value });
+    }
     onSubmit(e) {
         e.preventDefault();
         var noteName = this.state.name.trim();
         var noteText = this.state.text;
+        var noteCategory = this.state.category;
         if (!noteName) {
             return;
         }
-        this.props.onNoteSubmit({ name: noteName, text: noteText });
-        this.setState({ name: "", text: "" });
+        this.props.onNoteSubmit({ name: noteName, text: noteText, category: noteCategory });
+        this.setState({ name: "", text: "", category:"" });
     }
     render() {
         return (
@@ -65,6 +71,14 @@ class NotesForm extends React.Component {
                            value={this.state.text}
                            onChange={this.onTextChange} />
                 </p>
+
+                 <p>
+                    <input type="text"
+                           placeholder="Choose the category"
+                           value={this.state.category}
+                           onChange={this.onCategoryChange} />
+                </p>
+
                 <input type="submit"  className="btn bubble save" value="Save" />
             </form>
         );
@@ -99,7 +113,7 @@ class NotesList extends React.Component {
     onAddNote(note) {
         if (note) {
 
-            var data = JSON.stringify({ "name": note.name, "text": note.text });
+            var data = JSON.stringify({ "name": note.name, "text": note.text, "category":note.category });
             var xmlRequest = new XMLHttpRequest();
 
             xmlRequest.open("post", this.props.apiUrl, true);
@@ -134,15 +148,16 @@ class NotesList extends React.Component {
         var remove = this.onRemoveNote;
         return <div>
             <div className="container">
-            <NotesForm onNoteSubmit={this.onAddNote} />
+           
             <div className="header">
             <h2>My Bucket List</h2>
             </div>
-            <div className = "left"></div>
+            <div className = "left">
+            <NotesForm onNoteSubmit={this.onAddNote} />
+            </div>
             <div  className="center">
                 {
                     this.state.notes.map(function (note) {
-
                         return <Note key={note.id} note={note} onRemove={remove} />
                     })
                 }
