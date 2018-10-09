@@ -8,19 +8,40 @@ using ToDoList.Data;
 
 namespace ToDoList.Controllers
 {
+
+	public class Category
+	{
+		public string Name;
+		public List<Note> Notes;
+	}
+
+
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ValuesController : ControllerBase
 	{
 		// GET api/values
 		[HttpGet]
-		public ActionResult<IEnumerable<Note>> Get()
+		public List<Category> Get()
 		{
-
-			//var note = new Note("title", "text");
-			//notes.Add(note);
 			var notesList = NotesList.GetInstance();
-			return notesList.Notes;
+
+			var groupedNotes = notesList.Notes.GroupBy(x => x.Category)
+								  .Select(group => new KeyValuePair<string,List<Note>>( group.Key,group.ToList()))
+								  .ToDictionary(x=>x.Key, x=>x.Value);
+
+			var res = new List<Category>();
+			foreach (var groupedNote in groupedNotes)
+			{
+				var cat = new Category();
+				cat.Name = groupedNote.Key;
+				cat.Notes = groupedNote.Value;
+
+				res.Add(cat);
+			}
+
+			return res;
+			//return groupedNotes;
 		}
 
 		// GET api/values/5

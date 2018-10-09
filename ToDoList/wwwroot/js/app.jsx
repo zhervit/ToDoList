@@ -26,6 +26,8 @@
     }
 }
 
+
+
 class NotesForm extends React.Component {
     constructor(props) {
         super(props);
@@ -143,6 +145,7 @@ class NotesList extends React.Component {
             xmlRequest.send();
         }
     }
+
     render() {
 
         var remove = this.onRemoveNote;
@@ -157,8 +160,9 @@ class NotesList extends React.Component {
             </div>
             <div  className="center">
                 {
-                    this.state.notes.map(function (note) {
-                        return <Note key={note.id} note={note} onRemove={remove} />
+                    this.state.notes.map(function (notes) {
+                        
+                        return <Category key={notes.Name} notes={notes.Notes} onRemove={remove} />
                     })
                 }
             </div>
@@ -168,6 +172,23 @@ class NotesList extends React.Component {
     }
 }
 
+class Category extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { notes: props.Notes };
+    }
+    
+    render() {
+        return  <div  className="category">
+        {
+            this.state.notes.map(function (note) {
+                
+                return <Note key={note.id} note={note} onRemove={remove} />
+            })
+        }
+        </div>
+    }
+}
 
 ReactDOM.render(
     <NotesList apiUrl="/api/values" />,
