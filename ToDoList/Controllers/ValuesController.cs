@@ -12,13 +12,6 @@ namespace ToDoList.Controllers
 	[ApiController]
 	public class ValuesController : ControllerBase
 	{
-
-		private List<Note> notes = new List<Note>();
-
-		static ValuesController()
-		{
-		}
-
 		// GET api/values
 		[HttpGet]
 		public ActionResult<IEnumerable<Note>> Get()

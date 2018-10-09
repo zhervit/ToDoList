@@ -2,18 +2,26 @@
     constructor(props) {
         super(props);
         this.state = { data: props.note };
-        this.onClick = this.onClick.bind(this);
+        this.onDeleteClick = this.onDeleteClick.bind(this);
     }
-	onClick(e){
-        this.props.onRemove(this.state.note);
+	onDeleteClick(e){
+        this.props.onRemove(this.state.data);
     }
     render() {
-        return <div>
-                   <p><b>{this.state.data.id}</b></p>
-                   <p>{this.state.data.name}</p>
-                   <p>{this.state.data.text}</p>
-				  <p><button onClick={this.onClick}>Удалить</button></p>
-               </div>;
+        return  <div className="note">
+                        <p><b>{this.state.data.id}</b></p>
+                        <p>{this.state.data.name}</p>
+                        <p><img src="/media/logo.svg" className="logopic"/></p>
+                        <div className="text">
+                            <p>{this.state.data.text}</p>
+				        </div>
+                        <div >
+                        <p>
+                         <button className="btn bubble edit" onClick={this.onEditClick}>Edit</button>
+                         <button className="btn bubble delete" onClick={this.onDeleteClick}>Delete</button>
+                        </p>
+                        </div>
+                </div>;
     }
 }
 
@@ -57,7 +65,7 @@ class NotesForm extends React.Component {
                            value={this.state.text}
                            onChange={this.onTextChange} />
                 </p>
-                <input type="submit" value="Save" />
+                <input type="submit"  className="btn bubble save" value="Save" />
             </form>
         );
     }
@@ -125,15 +133,21 @@ class NotesList extends React.Component {
 
         var remove = this.onRemoveNote;
         return <div>
+            <div className="container">
             <NotesForm onNoteSubmit={this.onAddNote} />
-            <h2>List</h2>
-            <div>
+            <div className="header">
+            <h2>My Bucket List</h2>
+            </div>
+            <div className = "left"></div>
+            <div  className="center">
                 {
                     this.state.notes.map(function (note) {
 
                         return <Note key={note.id} note={note} onRemove={remove} />
                     })
                 }
+            </div>
+            <div className = "right"></div>
             </div>
         </div>;
     }
