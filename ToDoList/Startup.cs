@@ -54,8 +54,12 @@ namespace ToDoList
 			//app.UseHttpsRedirection();
 			//app.UseMvc();
 
-			app.UseReact(config => { });
+			
 			app.UseDefaultFiles();
+			app.UseReact(config =>
+			{
+
+			});
 			app.UseStaticFiles();
 			app.UseMvc();
 		}
