@@ -149,9 +149,7 @@ class NotesList extends React.Component {
     render() {
 
         var remove = this.onRemoveNote;
-        return <div>
-            <div className="container">
-           
+        return <div className="container">
             <div className="header">
             <h2>My Bucket List</h2>
             </div>
@@ -160,14 +158,13 @@ class NotesList extends React.Component {
             </div>
             <div  className="center">
                 {
-                    this.state.notes.map(function (notes) {
+                    this.state.notes.map(function (notesgroup) {
                         
-                        return <Category key={notes.Name} notes={notes.Notes} onRemove={remove} />
+                        return <Category key={notesgroup.name} groupname={notesgroup.name} notes={notesgroup.notes} onRemove={remove} />
                     })
                 }
             </div>
             <div className = "right"></div>
-            </div>
         </div>;
     }
 }
@@ -175,18 +172,37 @@ class NotesList extends React.Component {
 class Category extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { notes: props.Notes };
+        this.state = { data: props.notes };
+        this.onRemoveNote = this.onRemoveNote.bind(this);
     }
     
+    onRemoveNote(e){
+        this.props.onRemove(e);
+    }
+    collapse(e){
+        coll=e.currentTarget;
+
+        coll.classList.toggle("active");
+            var content = coll.nextElementSibling;
+            if (content.style.maxHeight){
+              content.style.maxHeight = null;
+            } else {
+              content.style.maxHeight = content.scrollHeight + "px";
+            } 
+         ;
+    }
     render() {
-        return  <div  className="category">
-        {
-            this.state.notes.map(function (note) {
-                
+        var remove = this.onRemoveNote;
+        return <div>
+            <button className="collapsible" onClick={this.collapse}>{this.props.groupname}</button>
+         <div  className="category">
+        {   
+            this.props.notes.map(function(note){
                 return <Note key={note.id} note={note} onRemove={remove} />
             })
         }
         </div>
+        </div>;
     }
 }
 
