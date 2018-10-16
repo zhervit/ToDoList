@@ -8,7 +8,7 @@ namespace ToDoList.Data
 	public class NotesList
 	{
 		private static NotesList instance;
-		public List<Note> Notes
+		public List<INote> Notes
 		{
 			get; private set;
 		}
@@ -29,7 +29,7 @@ namespace ToDoList.Data
 			Notes = fs.GetAllNotes().ToList();
 		}
 
-		public void Add(Note note)
+		public void Add(INote note)
 		{
 			XMLFileSaver fs = new XMLFileSaver();
 			fs.AddNewNote(note);

@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using React.AspNet;
+using ToDoList.DbData;
 
 namespace ToDoList
 {
@@ -34,6 +36,12 @@ namespace ToDoList
 		{
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 			services.AddReact();
+			
+
+			string connection = Configuration.GetConnectionString("NotesDbConnection");
+			services.AddDbContext<NotesDbContext>(options =>
+				options.UseSqlServer(connection));
+
 			services.AddMvc();
 
 			return services.BuildServiceProvider();

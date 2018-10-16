@@ -13,7 +13,7 @@ namespace ToDoList.Data
 		private string _path = "DB/xmldb.xml";
 
 
-		public void AddNewNote(Note note)
+		public void AddNewNote(INote note)
 		{
 			XDocument doc = XDocument.Load(_path);
 
@@ -37,7 +37,7 @@ namespace ToDoList.Data
 
 		}
 
-		public void SaveExistingNote(Note note)
+		public void SaveExistingNote(INote note)
 		{
 			throw new NotImplementedException();
 		}
@@ -58,16 +58,16 @@ namespace ToDoList.Data
 		}
 
 
-		public IEnumerable<Note> GetAllNotes()
+		public IEnumerable<INote> GetAllNotes()
 		{
 
-			var notesList = new List<Note>();
+			var notesList = new List<OldNote>();
 
 			XDocument doc = XDocument.Load(_path);
 			
 			foreach (XElement el in doc.Root.Elements())
 			{
-				Note note = new Note();
+				OldNote note = new OldNote();
 				note.Id = Convert.ToInt32(el.Attribute("id").Value);
 				note.Name = el.Element("Name")?.Value;
 				note.Text = el.Element("Text")?.Value;
@@ -89,16 +89,16 @@ namespace ToDoList.Data
 			//return notes;
 		}
 
-		public Note GetNoteById(int id)
+		public INote GetNoteById(int id)
 		{
-			Note newPerson = null;
-			XmlSerializer formatter = new XmlSerializer(typeof(Note));
+			OldNote newNote = null;
+			XmlSerializer formatter = new XmlSerializer(typeof(OldNote));
 			using (FileStream fs = new FileStream(_path, FileMode.OpenOrCreate))
 			{
-				newPerson = (Note)formatter.Deserialize(fs);
+				newNote = (OldNote)formatter.Deserialize(fs);
 			}
 
-			return newPerson;
+			return newNote;
 		}
 
 		public void DeleteNote(int id)
