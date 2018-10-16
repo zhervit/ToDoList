@@ -11,7 +11,7 @@ namespace ToDoList.DbData
 		public NotesDbContext(DbContextOptions<NotesDbContext> options)
 			: base(options)
 		{
-			Database.EnsureCreated();
+			//Database.EnsureCreated();
 		}
 
 		public DbSet<Note> Notes { get; set; }
