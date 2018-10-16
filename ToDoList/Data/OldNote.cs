@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace ToDoList.Data
 {
 	[Serializable]
-	public class Note
+	public class OldNote : INote
 	{
 		private int id;
 
@@ -21,12 +21,12 @@ namespace ToDoList.Data
 		public string Text { get; set; }
 		public string Category { get; set; }
 
-		public Note()
+		public OldNote()
 		{
 
 		}
 
-		public Note(string title = "", string text = "")
+		public OldNote(string title = "", string text = "")
 		{
 			Id = 11;
 			Name = title;

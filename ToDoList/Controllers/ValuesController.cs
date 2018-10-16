@@ -5,35 +5,39 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ToDoList.Data;
+using ToDoList.DbData;
 
 namespace ToDoList.Controllers
 {
-
-	public class Category
-	{
-		public string Name;
-		public List<Note> Notes;
-	}
-
-
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ValuesController : ControllerBase
 	{
+		private NotesDbContext _db;
+		public ValuesController(NotesDbContext context)
+		{
+			_db = context;
+		}
+
 		// GET api/values
 		[HttpGet]
-		public List<Category> Get()
+		public List<PreparedCategory> Get()
 		{
-			var notesList = NotesList.GetInstance();
+			var notesList = _db.Notes.Join(_db.Categories,
+				n => n.CategoryID,
+				cat => cat.CategoryID,
+				(n, cat) => new PreparedNote {Id = n.NoteID, Category = cat.Name, Name = n.Name, Text = n.Text}).ToList();
 
-			var groupedNotes = notesList.Notes.GroupBy(x => x.Category)
-								  .Select(group => new KeyValuePair<string,List<Note>>( group.Key,group.ToList()))
-								  .ToDictionary(x=>x.Key, x=>x.Value);
 
-			var res = new List<Category>();
+
+			var groupedNotes = notesList.GroupBy(x => x.Category)
+								  .Select(group => new KeyValuePair<string, List<PreparedNote>>(group.Key, group.ToList()))
+								  .ToDictionary(x => x.Key, x => x.Value);
+
+			var res = new List<PreparedCategory>();
 			foreach (var groupedNote in groupedNotes)
 			{
-				var cat = new Category();
+				var cat = new PreparedCategory();
 				cat.Name = groupedNote.Key;
 				cat.Notes = groupedNote.Value;
 
@@ -41,6 +45,7 @@ namespace ToDoList.Controllers
 			}
 
 			return res;
+
 			//return groupedNotes;
 		}
 
@@ -53,10 +58,28 @@ namespace ToDoList.Controllers
 
 		// POST api/values
 		[HttpPost]
-		public void Post([FromBody] Note note)
+		public void Post([FromBody] PreparedNote note)
 		{
-			var notesList = NotesList.GetInstance();
-			notesList.Add(note);
+			var categories = _db.Categories.Select(c => c.Name);
+
+			var newNote = new Note {Name = note.Name, Text = note.Text};
+
+			if (categories.Contains(note.Category))
+			{
+				newNote.CategoryID = _db.Categories.FirstOrDefault(c => c.Name.Equals(note.Category)).CategoryID;
+			}
+			else
+			{
+				var category = new Category {Name = note.Category, UserID = 1}; //todo useid
+				_db.Categories.Add(category);
+				_db.SaveChanges();
+				newNote.CategoryID = _db.Categories.FirstOrDefault(c => c.Name.Equals(note.Category)).CategoryID;
+			}
+
+			_db.Notes.Add(newNote);
+			_db.SaveChanges();
+			//var notesList = NotesList.GetInstance();
+			//notesList.Add(note);
 		}
 
 		// PUT api/values/5
@@ -69,9 +92,12 @@ namespace ToDoList.Controllers
 		[HttpDelete("{id}")]
 		public void Delete(int id)
 		{
-			var notesList = NotesList.GetInstance();
-
-			notesList.DeleteById(id);
+			var note = _db.Notes.FirstOrDefault(n => n.NoteID == id);
+			if (note != null)
+			{
+				_db.Notes.Remove(note);
+				_db.SaveChanges();
+			}
 		}
 	}
 }
