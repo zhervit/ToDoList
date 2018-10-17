@@ -10,6 +10,8 @@ namespace ToDoList.Data
 		public string Category;
 		public string Name;
 		public string Text;
+		public string ImageAddress;
+		public bool? IsChecked;
 		public int Id { get; set; }
 	}
 }

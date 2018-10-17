@@ -26,7 +26,7 @@ class NotesList extends React.Component {
     onAddNote(note) {
         if (note) {
 
-            var data = JSON.stringify({ "name": note.name, "text": note.text, "category":note.category });
+            var data = JSON.stringify({ "name": note.name, "text": note.text, "category":note.category, "imageAddress":note.imageAddress });
             var xmlRequest = new XMLHttpRequest();
 
             xmlRequest.open("post", this.props.apiUrl, true);

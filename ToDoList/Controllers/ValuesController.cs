@@ -26,7 +26,7 @@ namespace ToDoList.Controllers
 			var notesList = _db.Notes.Join(_db.Categories,
 				n => n.CategoryID,
 				cat => cat.CategoryID,
-				(n, cat) => new PreparedNote {Id = n.NoteID, Category = cat.Name, Name = n.Name, Text = n.Text}).ToList();
+				(n, cat) => new PreparedNote {Id = n.NoteID, Category = cat.Name, Name = n.Name, Text = n.Text,ImageAddress = n.ImageAddress, IsChecked=n.IsChecked }).ToList();
 
 
 
@@ -62,7 +62,7 @@ namespace ToDoList.Controllers
 		{
 			var categories = _db.Categories.Select(c => c.Name);
 
-			var newNote = new Note {Name = note.Name, Text = note.Text};
+			var newNote = new Note {Name = note.Name, Text = note.Text, ImageAddress = note.ImageAddress };
 
 			if (categories.Contains(note.Category))
 			{

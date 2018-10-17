@@ -7,6 +7,7 @@ class NotesForm extends React.Component {
         this.onNameChange = this.onNameChange.bind(this);
         this.onTextChange = this.onTextChange.bind(this);
         this.onCategoryChange = this.onCategoryChange.bind(this);
+        this.onImageChange = this.onImageChange.bind(this);
     }
     onNameChange(e) {
         this.setState({ name: e.target.value });
@@ -17,15 +18,19 @@ class NotesForm extends React.Component {
     onCategoryChange(e) {
         this.setState({ category: e.target.value });
     }
+    onImageChange(e) {
+        this.setState({ imageAddress: e.target.value });
+    }
     onSubmit(e) {
         e.preventDefault();
         var noteName = this.state.name.trim();
         var noteText = this.state.text;
         var noteCategory = this.state.category;
+        var imageAddress = this.state.imageAddress;
         if (!noteName) {
             return;
         }
-        this.props.onNoteSubmit({ name: noteName, text: noteText, category: noteCategory });
+        this.props.onNoteSubmit({ name: noteName, text: noteText, category: noteCategory, imageAddress:imageAddress });
         this.setState({ name: "", text: "", category:"" });
     }
     render() {
@@ -42,6 +47,13 @@ class NotesForm extends React.Component {
                            placeholder="Enter the text"
                            value={this.state.text}
                            onChange={this.onTextChange} />
+                </p>
+                
+                <p>
+                    <input type="text"
+                           placeholder="Choose the image"
+                           value={this.state.image}
+                           onChange={this.onImageChange} />
                 </p>
 
                  <p>
