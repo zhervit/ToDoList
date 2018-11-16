@@ -5,6 +5,7 @@ class NotesList extends React.Component {
         this.state = { notes: [] };
 
         this.onAddNote = this.onAddNote.bind(this);
+        this.onCreateCategory = this.onCreateCategory.bind(this);
         this.onRemoveNote = this.onRemoveNote.bind(this);
     }
 
@@ -30,6 +31,24 @@ class NotesList extends React.Component {
             var xmlRequest = new XMLHttpRequest();
 
             xmlRequest.open("post", this.props.apiUrl, true);
+            xmlRequest.setRequestHeader("Content-type", "application/json");
+            xmlRequest.onload = function () {
+                if (xmlRequest.status == 200) {
+                    this.loadData();
+                }
+            }.bind(this);
+            xmlRequest.send(data);
+        }
+    }
+
+    // create new category
+    onCreateCategory(category) {
+        if (category) {
+
+            var data = JSON.stringify({ "name": category.categoryName });
+            var xmlRequest = new XMLHttpRequest();
+
+            xmlRequest.open("post", this.props.apiUrl + "/categories", true);
             xmlRequest.setRequestHeader("Content-type", "application/json");
             xmlRequest.onload = function () {
                 if (xmlRequest.status == 200) {
@@ -66,6 +85,7 @@ class NotesList extends React.Component {
             </div>
             <div className = "left">
             <NotesForm onNoteSubmit={this.onAddNote} />
+            <CategoriesForm onCategorySubmit={this.onCreateCategory} />
             </div>
             <div  className="center">
                 {

@@ -56,7 +56,21 @@ namespace ToDoList.Controllers
 			return "value";
 		}
 
-		// POST api/values
+		// POST api/categories
+		[HttpPost("categories")]
+		public void Post([FromBody] PreparedCategory category)
+		{
+			var categories = _db.Categories.Select(c => c.Name);
+
+			if (!categories.Contains(category.Name))
+			{							  
+				var newCategory = new Category { Name = category.Name, UserID = 1 }; //todo use userid
+				_db.Categories.Add(newCategory);
+				_db.SaveChanges();
+			}
+		}
+
+		
 		[HttpPost]
 		public void Post([FromBody] PreparedNote note)
 		{
@@ -70,7 +84,7 @@ namespace ToDoList.Controllers
 			}
 			else
 			{
-				var category = new Category {Name = note.Category, UserID = 1}; //todo useid
+				var category = new Category {Name = note.Category, UserID = 1}; //todo use userid
 				_db.Categories.Add(category);
 				_db.SaveChanges();
 				newNote.CategoryID = _db.Categories.FirstOrDefault(c => c.Name.Equals(note.Category)).CategoryID;
